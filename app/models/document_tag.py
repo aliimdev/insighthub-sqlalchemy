@@ -6,36 +6,19 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
 
-
 class DocumentTag(Base):
+    #Represents the many-to-many relationship between documents and tags.
+    
     __tablename__ = "document_tags"
 
     document_id: Mapped[int] = mapped_column(
-        ForeignKey("documents.id", ondelete="CASCADE"),
-         primary_key=True)
-    
+        ForeignKey("document.id", ondelete="CASCADE"), primary_key=True
+    )
+
     tag_id: Mapped[int] = mapped_column(
-        ForeignKey("tags.id", ondelete="CASCADE"),
-          primary_key=True)
-    
+        ForeignKey("tags.id", ondelete="CASCADE"), primary_key=True
+    )
+
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), 
-        server_default=func.now())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        DateTime(timezone=True), server_default=func.now()
+    )

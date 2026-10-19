@@ -8,13 +8,19 @@ from app.models.document_tag import DocumentTag
 
 
 class Tag(Base):
+    # Represents a tag used to categorize documents.
+    
     __tablename__ = "tags"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), unique=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
 
-    documents: Mapped[list["Document"]] = relationship(secondary=DocumentTag.__table__, back_populates="tags")
+    documents: Mapped[list["Document"]] = relationship(
+        secondary=DocumentTag.__table__, back_populates="tags"
+    )
 
     def __repr__(self) -> str:
         return f"<Tag id={self.id} name={self.name!r}>"

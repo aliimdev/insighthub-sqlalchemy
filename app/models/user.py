@@ -8,11 +8,15 @@ from app.database import Base
 
 
 class User(Base):
+    # Represents a user who owns a profile and documents in the database.
+
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(BigInteger,primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     email: Mapped[str] = mapped_column(String(255), unique=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
 
     profile: Mapped[Optional["UserProfile"]] = relationship(
         back_populates="user",
@@ -28,7 +32,3 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"<User id={self.id} email={self.email!r}>"
-
-
-
-

@@ -9,7 +9,7 @@ from app.models.document_tag import DocumentTag
 
 class Tag(Base):
     # Represents a tag used to categorize documents.
-    
+
     __tablename__ = "tags"
 
     id: Mapped[int] = mapped_column(primary_key=True)

@@ -9,7 +9,7 @@ from app.models.document_tag import DocumentTag
 
 class Document(Base):
     # Represents a document with its content, author, and associated tags.
-    
+
     __tablename__ = "document"
 
     id: Mapped[int] = mapped_column(primary_key=True)

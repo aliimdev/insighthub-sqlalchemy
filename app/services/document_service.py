@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.models import Document
 
-
 # Searches documents by keyword and returns a paginated list of results.
+
 
 def search_documents(
     session: Session,

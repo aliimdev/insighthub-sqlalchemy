@@ -7,8 +7,8 @@ from app.database import Base
 
 
 class DocumentTag(Base):
-    #Represents the many-to-many relationship between documents and tags.
-    
+    # Represents the many-to-many relationship between documents and tags.
+
     __tablename__ = "document_tags"
 
     document_id: Mapped[int] = mapped_column(

@@ -1,33 +1,40 @@
 from collections.abc import Sequence
-
 from sqlalchemy import select
-from sqlalchemy.orm import Session, contains_eager
-
+from sqlalchemy.orm import Session, contains_eager, selectinload
 from app.models import User, UserProfile
-
+from app.core.security import hash_password
 
 # Creates a new user and their profile.
 
+
 def create_user(
-    session: Session, email: str, full_name: str, bio: str | None = None
+    session: Session, email: str, full_name: str, password: str, bio: str | None = None
 ) -> User:
-    user = User(email=email)
+    user = User(
+        email=email,
+        hashed_password=hash_password(password),
+    )
     user.profile = UserProfile(full_name=full_name, bio=bio)
 
     session.add(user)
-    session.flush()
-    return user
+    session.commit()
+    session.refresh(user)
 
+    return user
 
 
 # Retrieves a limited list of users ordered by ID.
 
+
 def get_users(session: Session, limit: int = 5) -> Sequence[User]:
-    stmt = select(User).order_by(User.id).limit(limit)
+    stmt = (
+        select(User).options(selectinload(User.profile)).order_by(User.id).limit(limit)
+    )
     return session.scalars(stmt).all()
 
 
 # Searches users by their full name.
+
 
 def search_users_by_name(session: Session, name: str) -> Sequence[User]:
     pattern = f"%{name}%"
@@ -42,9 +49,8 @@ def search_users_by_name(session: Session, name: str) -> Sequence[User]:
     return session.scalars(stmt).all()
 
 
-
-
 # Updates a user's profile information.
+
 
 def update_user(
     session: Session,
@@ -65,6 +71,7 @@ def update_user(
 
 
 # Deletes a user by ID and returns whether the user was found.
+
 
 def delete_user(session: Session, user_id: int) -> bool:
     user = session.get(User, user_id)
